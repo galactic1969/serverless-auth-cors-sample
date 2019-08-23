@@ -1,0 +1,14 @@
+node_modules/**
+.serverless/**
+
+config/dev.yml
+
+.node-version
+.python-version
+.vscode
+.envrc
+
+__pycache__
+.DS_Store
+
+test/request.http

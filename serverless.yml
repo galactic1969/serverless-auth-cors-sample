@@ -1,0 +1,110 @@
+service: sls-auth-cors-sample
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: ${opt:stage, self:custom.defaultStage}
+  account: ${self:custom.confFile.${self:provider.stage}.aws.account}
+  region: ${self:custom.confFile.${self:provider.stage}.aws.region}
+  role: LambdaRole
+plugins:
+  - serverless-plugin-encrypted
+  - serverless-prune-plugin
+  - serverless-python-requirements
+
+custom:
+  defaultStage: dev
+  confFile:
+    dev: ${file(./config/dev.yml)}
+    prod: ${file(./config/prod.yml)}
+  prune:
+    automatic: true
+    number: 3
+  kmsKeyId: ${self:provider.stage}-${self:service}
+  encrypted:
+    API_AUTH_KEY: ${self:custom.confFile.${self:provider.stage}.api.auth_key}
+    API_ALLOW_IP: ${self:custom.confFile.${self:provider.stage}.api.allow_ip_address}
+  pythonRequirements:
+    slim: true
+    useStaticCache: true
+    noDeploy:
+      - flake8
+      - pycodestyle
+      - pyflakes
+
+package:
+  include:
+    - src/**
+  exclude:
+    # Packages
+    - node_modules/**
+    - package.json
+    - package-lock.json
+    - requirements.txt
+    # Test
+    - tests/**
+    # EventData
+    - event_data/**
+    # Config
+    - serverless.yml
+    - conf/**
+    # Environment
+    - .node-version
+    - .python-version
+    - .envrc
+    - .gitignore
+    - .vscode/**
+
+functions:
+  sampleGet:
+    name: ${self:provider.stage}-${self:service}-sample-get
+    handler: src/get.main
+    timeout: 30
+    events:
+      - http:
+          path: /sample/
+          method: get
+          authorizer:
+            name: custom-authorizer
+            identitySource: method.request.header.Authorization, context.identity.sourceIp
+            type: request
+          integration: lambda
+          cors:
+            origin: '*'
+            headers:
+              - Authorization
+          request:
+            template:
+              application/json: '{"param1" : "$input.params(''param1'')", "param2": "$input.params(''param2'')"}'
+  samplePost:
+    name: ${self:provider.stage}-${self:service}-sample-post
+    handler: src/post.main
+    timeout: 30
+    events:
+      - http:
+          path: /sample/
+          method: post
+          authorizer:
+            name: custom-authorizer
+            identitySource: method.request.header.Authorization, context.identity.sourceIp
+            type: request
+          integration: lambda
+          cors:
+            origin: '*'
+            headers:
+              - Authorization
+              - Content-Type
+          request:
+            template:
+              application/json: '{"param1" : "$input.path(''$.param1'')", "param2": "$input.path(''$.param2'')"}'
+  custom-authorizer:
+    name: ${self:provider.stage}-${self:service}-custom-authorizer
+    handler: src/custom_authorizer.main
+    timeout: 30
+    environment:
+      API_AUTH_KEY: ${self:custom.confFile.${self:provider.stage}.api.auth_key}
+      API_ALLOW_IP: ${self:custom.confFile.${self:provider.stage}.api.allow_ip_address}
+
+
+resources:
+  - ${file(./resources/iam.yml)}

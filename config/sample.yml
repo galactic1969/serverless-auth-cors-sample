@@ -1,0 +1,8 @@
+aws:
+  account: 000000000000
+  region: ap-northeast-1
+kms:
+  arn: arn:aws:kms:ap-northeast-1:xxx:key/xxx
+api:
+  auth_key: xxx
+  allow_ip_address: 0.0.0.0, 1.1.1.1
