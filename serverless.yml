@@ -68,7 +68,7 @@ functions:
             name: custom-authorizer
             identitySource: method.request.header.Authorization, context.identity.sourceIp
             type: request
-          integration: lambda
+          integration: lambda-proxy
           cors:
             origin: '*'
             headers:
@@ -88,7 +88,7 @@ functions:
             name: custom-authorizer
             identitySource: method.request.header.Authorization, context.identity.sourceIp
             type: request
-          integration: lambda
+          integration: lambda-proxy
           cors:
             origin: '*'
             headers:
