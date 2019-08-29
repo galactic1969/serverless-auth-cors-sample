@@ -11,4 +11,4 @@ config/dev.yml
 __pycache__
 .DS_Store
 
-test/request.http
+test/req.http

@@ -1,0 +1,17 @@
+POST https://xxx.execute-api.ap-northeast-1.amazonaws.com/dev/sample
+Authorization: xxxauthxxx
+Content-Type: application/json
+
+{
+  "param1": "foo",
+  "param2": "bar"
+}
+
+###
+
+GET https://xxx.execute-api.ap-northeast-1.amazonaws.com/dev/sample?param1=foo&param2=bar
+Authorization: xxxauthxxx
+
+###
+
+OPTIONS https://xxx.execute-api.ap-northeast-1.amazonaws.com/dev/sample
