@@ -73,9 +73,6 @@ functions:
             origin: '*'
             headers:
               - Authorization
-          request:
-            template:
-              application/json: '{"param1" : "$input.params(''param1'')", "param2": "$input.params(''param2'')"}'
   samplePost:
     name: ${self:provider.stage}-${self:service}-sample-post
     handler: src/post.main
@@ -94,9 +91,6 @@ functions:
             headers:
               - Authorization
               - Content-Type
-          request:
-            template:
-              application/json: '{"param1" : "$input.path(''$.param1'')", "param2": "$input.path(''$.param2'')"}'
   custom-authorizer:
     name: ${self:provider.stage}-${self:service}-custom-authorizer
     handler: src/custom_authorizer.main

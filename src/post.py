@@ -8,14 +8,15 @@ logger.setLevel(logging.INFO)
 def main(event, context):
     """
     Args:
-        event (dict): keys(location, keyword, title, url)
+        event (dict):
         context (context): LambdaのContext
     """
-    logger.info(event)
+    params = json.loads(event.body)
+    logger.info(params)
     response = {
         'result': 'ok',
-        'param1': event.get('param1'),
-        'param2': event.get('param2')
+        'param1': params.get('param1'),
+        'param2': params.get('param2')
     }
 
     if str(type(context)) == '<class \'__main__.FakeLambdaContext\'>':
