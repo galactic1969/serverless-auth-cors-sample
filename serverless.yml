@@ -102,3 +102,4 @@ functions:
 
 resources:
   - ${file(./resources/iam.yml)}
+  - ${file(./resources/apigw.yml)}
