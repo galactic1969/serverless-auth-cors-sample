@@ -11,7 +11,7 @@ def main(event, context):
         event (dict):
         context (context): LambdaのContext
     """
-    params = json.loads(event.body)
+    params = json.loads(event['body'])
     logger.info(params)
     response = {
         'result': 'ok',
