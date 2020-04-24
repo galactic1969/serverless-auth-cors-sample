@@ -29,10 +29,7 @@ def main(event, context):
         return {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST',
-                'Access-Control-Allow-Headers': 'Authorization, Content-Type'
             },
-            'body': json.dumps(response),
+            'body': 'HogeFugaPost',
             'isBase64Encoded': False
         }
